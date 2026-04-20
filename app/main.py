@@ -13,8 +13,11 @@ from app.db import SessionLocal
 
 import os
 
-app = FastAPI()
-
+app = FastAPI(
+    title="sarjan Secure File Sharing API 🚀",
+    description="Secure file sharing system with authentication and email verification",
+    version="1.0.0"
+)
 Base.metadata.create_all(bind=engine)
 
 def get_db():
