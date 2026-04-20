@@ -1,8 +1,10 @@
+
+from fastapi.security import OAuth2PasswordBearer
+from fastapi import Depends
 from app.db import Base, engine
 from dotenv import load_dotenv
 load_dotenv()
 from app.models.file import File as FileModel
-from app.auth.auth import create_download_token
 from jose import jwt
 from fastapi import FastAPI, UploadFile, File, Depends
 from sqlalchemy.orm import Session
@@ -44,8 +46,46 @@ def upload_file(file: UploadFile = File(...), db: Session = Depends(get_db)):
 
 @app.get("/share/{file_id}")
 def generate_link(file_id: int):
-    token = create_download_token(file_id)
 
     return {
         "download_url": f"http://127.0.0.1:8000/download?token={token}"
     }
+
+# ================= CLIENT =================
+
+@app.post("/client/signup")
+def signup():
+    return {"msg": "User created"}
+
+@app.post("/client/login")
+def login():
+    token = create_token({"user": "client"})
+    return {"access_token": token}
+
+@app.get("/client/files")
+def list_files():
+    return ["file1.jpg", "file2.pdf"]
+
+@app.get("/client/download/{file_id}")
+def get_download(file_id: int):
+    return {"link": f"/client/download-file/{file_id}"}
+
+@app.get("/client/download-file/{enc}")
+def download_file(enc: str):
+    return {"msg": f"Downloading {enc}"}
+
+
+# ================= OPS =================
+
+@app.post("/ops/upload")
+def ops_upload():
+    return {"msg": "File uploaded by ops"}
+
+
+# ================= AUTH =================
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/client/login")
+
+@app.get("/secure")
+def secure(token: str = Depends(oauth2_scheme)):
+    return {"msg": "secured"}
