@@ -1,4 +1,5 @@
-
+from app.auth.token import create_email_token, verify_email_token
+from app.send_mail import send_verification_email
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import Depends
 from app.db import Base, engine
@@ -54,8 +55,13 @@ def generate_link(file_id: int):
 # ================= CLIENT =================
 
 @app.post("/client/signup")
-def signup():
-    return {"msg": "User created"}
+async def signup():
+    email = "sarjanpratap@gmail.com"   # अभी fix email
+
+    token = create_email_token(email)
+    await send_verification_email(email, token)
+
+    return {"msg": "Verification email sent"}
 
 @app.post("/client/login")
 def login():
@@ -74,6 +80,13 @@ def get_download(file_id: int):
 def download_file(enc: str):
     return {"msg": f"Downloading {enc}"}
 
+@app.get("/client/email-verify/{token}")
+def verify_email(token: str):
+    try:
+        email = verify_email_token(token)
+        return {"msg": f"{email} verified successfully"}
+    except:
+        return {"msg": "Invalid or expired token"}
 
 # ================= OPS =================
 
