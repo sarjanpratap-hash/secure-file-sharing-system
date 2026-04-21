@@ -15,8 +15,8 @@ import os
 
 app = FastAPI(
     title="Sarjan Secure File Sharing API 🚀",
-    description="Secure file sharing system with authentication and email verification",
-    version="1.0.0"
+    description="Production Ready Secure File Sharing API with Docker & PostgreSQL",
+    version="2.0.0"
 )
 
 import time 
