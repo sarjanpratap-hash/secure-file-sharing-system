@@ -8,12 +8,11 @@ This project allows users to upload, share, and download files securely using **
 
 # 🧠 How This Project Works (Easy Explanation)
 
-1. User signup/login करता है (JWT token मिलता है)
-2. User file upload करता है
-3. System database में file store करता है
-4. Share API से secure link generate होता है
-5. Download link encrypted होता है (secure access)
-
+User signs up or logs in and receives a JWT authentication token.
+The user uploads a file to the system.
+The system securely stores the file and its metadata in the database.
+The Share API generates a secure, shareable link.
+The download link is encrypted to ensure secure and authorized access.
 ---
 
 # 🔐 Features
